@@ -5,7 +5,7 @@ This bot is designed to help you manage your Roblox ERLC server through Discord.
 ## Features
 
 - Moderation commands: Kick, ban, role, etc.
-- Server commands (soon): SSU, SSD, poll, etc.
+- Server commands: SSU, SSD, poll, etc.
 - Management commands: promote, infract, etc.
 - Fun commands / games (soon): Play games with the bot and access its fun commands.
 
