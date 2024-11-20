@@ -38,7 +38,10 @@ class Counter(discord.ui.View):
         for id in votedUsers:
             mention = f"<@{id}>"
             mentions.append(mention)
-        await interaction.response.send_message(content=", ".join(mentions), ephemeral=True)
+        if len(mentions) == 0:
+            await interaction.response.send_message(content="No voters at this time.", ephemeral=True)
+        else:
+            await interaction.response.send_message(content=", ".join(mentions), ephemeral=True)
 
 class sessions(commands.Cog):
     def __init__(self, client):
