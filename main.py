@@ -32,6 +32,8 @@ async def on_tree_error(interaction : discord.Interaction, error: app_commands.A
         return await interaction.response.send_message(f"You're missing permissions to use this command.")
     elif isinstance(error, app_commands.MissingRole):
         return await interaction.response.send_message("You're missing the required role to use this command.")
+    elif isinstance(error, app_commands.MissingAnyRole):
+        return await interaction.response.send_message ("You're missing tghe required role to use this command.")
     else:
         raise error
 
