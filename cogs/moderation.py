@@ -25,7 +25,6 @@ class moderation(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.client.tree.sync()
         print(f"{__name__} loaded successfully!")
 
     @role.command(name="add", description="Adds a role to a user.")
@@ -211,12 +210,11 @@ class moderation(commands.Cog):
     @app_commands.command(name="warn", description="Warns a user")
     @app_commands.checks.has_any_role(MODERATION_ROLE, DIRECTIVE_ROLE)
     async def warn(self, interaction : discord.Interaction, member : discord.Member, reason : str):
+        await interaction.response.defer()
         with open("cogs/json/warns.json", "r", encoding="UTF-8") as f:
             data = json.load(f)
 
         prevInfractions = len(data[str(member.id)])
-        if prevInfractions != 0:
-            prevInfractions += 1
 
         uniqueId = uuid.uuid4()
         data[str(member.id)][prevInfractions] = {
@@ -228,7 +226,16 @@ class moderation(commands.Cog):
         with open("cogs/json/warns.json", "w", encoding="UTF-8") as f:
             json.dump(data, f, indent=4)
 
-        await interaction.response.send_message(f"Successfully warned user {member.mention} for {reason}")
+        embed = discord.Embed(title="⚠️ Warning", color=discord.Color.red())
+        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
+        embed.add_field(name="", value=f"You have received a warning in SFRP for violating the rules.\n\n> **Moderator:** {interaction.user.mention}\n> **Reason:** {reason}\n> **Date:** {datetime.date.today()}\n\n-# *If this was false open a ticket in <#1117544480405467157>.*")
+        embed.set_footer(text="Powered by SFRP", icon_url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
+
+        try:
+            await member.send(embed=embed)
+        except Exception as e:
+            print(e)
+        await interaction.followup.send(f"Successfully warned user {member.mention} for {reason}")
 
     @app_commands.command(name="view-warns", description="Gets a list of warns of a user.")
     async def view_warns(self, interaction : discord.Interaction, member : discord.Member = None):
@@ -260,7 +267,7 @@ class moderation(commands.Cog):
                 found = True
                 break
         if found == False:
-            await interaction.followup.send(f"Warn with id: {ID} not found for user.")
+            await interaction.followup.send(f"Warn with id: {id} not found for user.")
 
         with open("cogs/json/warns.json", "w", encoding="UTF-8") as f:
             json.dump(data, f, indent=4)

@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 from discord.utils import get
 from dotenv import dotenv_values
-import datetime
+from dispie import EmbedCreator
 
 config = dotenv_values(".env")
 
@@ -21,7 +21,6 @@ class management(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.client.tree.sync()
         print(f"{__name__} loaded successfully!")
 
     @app_commands.command(name="infract", description="Infracts the given staff member.")
@@ -56,6 +55,19 @@ class management(commands.Cog):
         channel = self.client.get_channel(int(PROMOTE_CHANNEL_ID))
         await channel.send(content=user.mention, embed=infract_embed)
         await interaction.response.send_message("Successfully promoted the user.")
+
+    @app_commands.command(name="say", description="Have the bot say the inputted text.")
+    @app_commands.checks.has_any_role(DIRECTIVE_ROLE)
+    async def say(self, interaction : discord.Interaction, message : str, channel : discord.TextChannel = None):
+        channel = channel or interaction.channel
+        await channel.send(message)
+        await interaction.response.send_message(content="Sent message.", ephemeral=True)
+
+    @app_commands.command(name="create-embed", description="Opens the embed builder")
+    @app_commands.checks.has_any_role(DIRECTIVE_ROLE)
+    async def create_embed(self, interaction : discord.Interaction):
+        view = EmbedCreator(bot=self.client)
+        await interaction.response.send_message(embed=view.get_default_embed, view=view)
 
 async def setup(client):
     await client.add_cog(management(client))

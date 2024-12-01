@@ -49,8 +49,14 @@ class sessions(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.client.tree.sync()
         print(f"{__name__} loaded successfully!")
+
+    @app_commands.command(name="sync")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def sync(self, interaction : discord.Interaction):
+        await interaction.response.defer()
+        fmt = await self.client.tree.sync()
+        await interaction.followup.send(f"Synced {len(fmt)} commands.")
         
     @app_commands.command(name="poll", description="Initiates a session poll.")
     @app_commands.checks.has_any_role(MGMT_ROLE, DIRECTIVE_ROLE)
@@ -73,7 +79,7 @@ class sessions(commands.Cog):
     @app_commands.command(name="ssu", description="Initiates a server start-up.")
     @app_commands.checks.has_any_role(MGMT_ROLE, DIRECTIVE_ROLE)
     async def ssu(self, interaction: discord.Interaction):
-        await interaction.response.defer()
+        print("Activated")
         emoji = get(interaction.guild.emojis, name="sfrp")
         channel = self.client.get_channel(int(SESSION_CHANNEL_ID))
 
@@ -98,7 +104,7 @@ class sessions(commands.Cog):
 
     @app_commands.command(name="low", description="Sends the low player count message.")
     @app_commands.checks.has_any_role(MGMT_ROLE, DIRECTIVE_ROLE)
-    async def ssd(self, interaction: discord.Interaction):
+    async def low(self, interaction: discord.Interaction):
         await interaction.response.defer()
         emoji = get(interaction.guild.emojis, name="sfrp")
         channel = self.client.get_channel(int(SESSION_CHANNEL_ID))
