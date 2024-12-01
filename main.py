@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 import asyncio
 from dotenv import dotenv_values
+import json
 
 config = dotenv_values(".env")
 
@@ -14,6 +15,26 @@ Bot = commands.Bot(command_prefix="?", intents=discord.Intents.all(), help_comma
 async def on_ready():
     await Bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="SFRP"))
     print("Bot is connected to discord!")
+
+@Bot.event
+async def on_member_join(member):
+    with open("cogs/json/warns.json", "r", encoding="UTF-8") as f:
+        data = json.load(f)
+
+    data[str(member.id)] = {}
+    
+    with open("cogs/json/warns.json", "w", encoding="UTF-8") as f:
+        json.dump(data, f, indent=4)
+
+@Bot.event
+async def on_member_remove(member):
+    with open("cogs/json/warns.json", "r", encoding="UTF-8") as f:
+        data = json.load(f)
+
+    del data[str(member.id)]
+
+    with open("cogs/json/warns.json", "w", encoding="UTF-8") as f:
+        json.dump(data, f, indent=4)
 
 async def load():
     for filename in os.listdir("cogs"):
