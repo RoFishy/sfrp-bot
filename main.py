@@ -12,7 +12,7 @@ Bot = commands.Bot(command_prefix="?", intents=discord.Intents.all(), help_comma
 
 @Bot.event
 async def on_ready():
-    await Bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="NYCRP"))
+    await Bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="SFRP"))
     print("Bot is connected to discord!")
 
 async def load():

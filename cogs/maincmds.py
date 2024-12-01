@@ -9,9 +9,10 @@ class maincmds(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
+        global startTime
+        startTime = time.time()
         await self.client.tree.sync()
         print(f"{__name__} loaded successfully!")
-        self.startTime = time.time()
 
     @app_commands.command(name="ping", description="Show's the bot's current latency.")
     async def ping(self, interaction : discord.Interaction):
@@ -19,12 +20,12 @@ class maincmds(commands.Cog):
         embed.add_field(name="Ping:", value=f"{round(self.client.latency) * 1000}ms")
 
         currentTime = time.time()
-        diff = int(round(currentTime-self.startTime))
+        diff = int(round(currentTime-startTime))
         text = str(datetime.timedelta(seconds=diff))
         embed.add_field(name="Uptime:", value=text)
         embed.set_footer(text="Powered by SFRP", icon_url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
 
         await interaction.response.send_message(embed=embed)
-
+        
 async def setup(client):
     await client.add_cog(maincmds(client))
