@@ -3,6 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 from discord.utils import get
 from dotenv import dotenv_values
+import datetime
 
 config = dotenv_values(".env")
 
@@ -26,8 +27,8 @@ class management(commands.Cog):
     @app_commands.command(name="infract", description="Infracts the given staff member.")
     @app_commands.checks.has_any_role(DIRECTIVE_ROLE, IA_ROLE, MGMT_ROLE)
     async def infract(self, interaction: discord.Interaction, user: discord.Member, reason: str, outcome: str):
-        emoji = get(interaction.guild.emojis, name="nycrp")
-        line = get(interaction.guild.emojis, name="BlueLine")
+        emoji = get(interaction.guild.emojis, name="sfrp")
+        line = "**-**"
 
         infract_embed = discord.Embed(title=f"{emoji} | Infraction", color=discord.Color.blue())
         infract_embed.add_field(name="", value=f"{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}", inline=False)
@@ -36,7 +37,7 @@ class management(commands.Cog):
         infract_embed.add_field(name="Reason: ", value=reason, inline=False)
         infract_embed.add_field(name="Outcome: ", value=outcome, inline=False)
         infract_embed.add_field(name="", value="\n *If this was false open a ticket in <#1304575261358162032>*")
-        infract_embed.set_footer(text="Powered by NYCRP", icon_url="https://cdn.discordapp.com/attachments/1305269939162320946/1308544269128044614/NYCRP_SERVER_LOGO.png?ex=673e5451&is=673d02d1&hm=b2b82704abc59ce686f730da31cee671b61d68d9386f8412fd38d26f5e9be2f9&")
+        infract_embed.set_footer(text="Powered by SFRP", icon_url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
 
         channel = self.client.get_channel(int(INFRACT_CHANNEL_ID))
         await channel.send(content=user.mention, embed=infract_embed)
@@ -45,17 +46,15 @@ class management(commands.Cog):
     @app_commands.command(name="promote", description="Promotes the given staff member.")
     @app_commands.checks.has_any_role(DIRECTIVE_ROLE, IA_ROLE, MGMT_ROLE)
     async def promote(self, interaction: discord.Interaction, user: discord.Member, reason: str, new_rank: str, old_rank: str):
-        emoji = get(interaction.guild.emojis, name="nycrp")
-        line = get(interaction.guild.emojis, name="BlueLine")
+        emoji = get(interaction.guild.emojis, name="sfrp")
+        line = "**-**"
 
-        infract_embed = discord.Embed(title=f"{emoji} | Promotion", color=discord.Color.blue())
-        infract_embed.add_field(name="", value=f"{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}", inline=False)
-        infract_embed.add_field(name="Moderator: ", value=interaction.user.mention, inline=False)
-        infract_embed.add_field(name="User: ", value=user.mention, inline=False)
-        infract_embed.add_field(name="Reason: ", value=reason, inline=False)
-        infract_embed.add_field(name="Old Rank: ", value=old_rank, inline=False)
-        infract_embed.add_field(name="New Rank: ", value=new_rank, inline=False)
-        infract_embed.set_footer(text="Powered by NYCRP", icon_url="https://cdn.discordapp.com/attachments/1305269939162320946/1308544269128044614/NYCRP_SERVER_LOGO.png?ex=673e5451&is=673d02d1&hm=b2b82704abc59ce686f730da31cee671b61d68d9386f8412fd38d26f5e9be2f9&")
+        infract_embed = discord.Embed(title=f"{emoji} | Staff Promotion", color=discord.Color.orange())
+        infract_embed.add_field(name="", value=f"Congrats on getting promoted!", inline=False)
+        infract_embed.add_field(name="", value=f"> **User:** {user.mention}\n> **Old Rank:** {old_rank}\n> **New Rank:** {new_rank}\n> **Reason:** {reason}\n> **Moderator:** {interaction.user.mention}", inline=False)
+        infract_embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
+        infract_embed.set_footer(text=f"Powered by SFRP", icon_url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
+
 
         channel = self.client.get_channel(int(PROMOTE_CHANNEL_ID))
         await channel.send(content=user.mention, embed=infract_embed)

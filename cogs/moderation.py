@@ -32,18 +32,18 @@ class moderation(commands.Cog):
     @app_commands.command(name="purge", description="Purges above messages.")
     @app_commands.checks.has_any_role(MODERATION_ROLE, DIRECTIVE_ROLE)
     async def purge(self, interaction : discord.Interaction, count : int):
+        await interaction.response.send_message(f"Purged {count} message(s).", ephemeral=True)
         await interaction.channel.purge(limit=count)
-        conf_embed = discord.Embed(title = "Message Purged", color=discord.Color.blue())
+        conf_embed = discord.Embed(title = "Message Purged", color=discord.Color.blue(), url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
         conf_embed.add_field(name="Moderator: ",value=interaction.user.mention, inline=False)
         conf_embed.add_field(name="Messages: ", value=count, inline=False)
         conf_embed.add_field(name="Channel: ", value=interaction.channel)
-        conf_embed.set_footer(text="Powered by NYCRP", icon_url="https://cdn.discordapp.com/attachments/1305269939162320946/1308544269128044614/NYCRP_SERVER_LOGO.png?ex=673e5451&is=673d02d1&hm=b2b82704abc59ce686f730da31cee671b61d68d9386f8412fd38d26f5e9be2f9&")
         
         channel = self.client.get_channel(int(LOGGING_CHANNEL_ID))
         
         await channel.send(embed=conf_embed)
 
-        await interaction.response.send_message(f"Purged {count} message(s).", ephemeral=True)
+
 
     @app_commands.command(name="kick", description="Kicks the given user")
     @app_commands.checks.has_any_role(MODERATION_ROLE, DIRECTIVE_ROLE)
@@ -55,7 +55,7 @@ class moderation(commands.Cog):
             conf_embed.add_field(name="Moderator: ",value=interaction.user.mention, inline=False)
             conf_embed.add_field(name="Kicked: ", value=member.mention, inline=False)
             conf_embed.add_field(name="Reason: ", value=reason, inline=False)
-            conf_embed.set_footer(text="Powered by NYCRP", icon_url="https://cdn.discordapp.com/attachments/1305269939162320946/1308544269128044614/NYCRP_SERVER_LOGO.png?ex=673e5451&is=673d02d1&hm=b2b82704abc59ce686f730da31cee671b61d68d9386f8412fd38d26f5e9be2f9&")
+            conf_embed.set_footer(text="Powered by SFRP", icon_url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
 
             channel = self.client.get_channel(LOGGING_CHANNEL_ID)
             await channel.send(embed=conf_embed)
@@ -74,7 +74,7 @@ class moderation(commands.Cog):
             conf_embed.add_field(name="Moderator: ",value=interaction.user.mention, inline=False)
             conf_embed.add_field(name="Banned: ", value=member.mention, inline=False)
             conf_embed.add_field(name="Reason: ", value=reason, inline=False)
-            conf_embed.set_footer(text="Powered by NYCRP", icon_url="https://cdn.discordapp.com/attachments/1305269939162320946/1308544269128044614/NYCRP_SERVER_LOGO.png?ex=673e5451&is=673d02d1&hm=b2b82704abc59ce686f730da31cee671b61d68d9386f8412fd38d26f5e9be2f9&")
+            conf_embed.set_footer(text="Powered by SFRP", icon_url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
 
             channel = self.client.get_channel(LOGGING_CHANNEL_ID)
             await channel.send(embed=conf_embed)

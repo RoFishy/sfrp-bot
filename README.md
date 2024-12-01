@@ -1,4 +1,4 @@
-# NYCRP Main Bot
+# SFRP Main Bot
 
 This bot is designed to help you manage your Roblox ERLC server through Discord. It provides basic moderation, management, and staff commands, as well as some fun commands.
 
