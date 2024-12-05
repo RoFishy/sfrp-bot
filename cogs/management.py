@@ -35,9 +35,15 @@ class management(commands.Cog):
         infract_embed.set_footer(text="Powered by SFRP", icon_url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
         infract_embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
 
+        embed = discord.Embed(title="⚠️ Staff Infraction", color=discord.Color.red())
+        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
+        embed.add_field(name="", value=f"You have received an infraction in SFRP for violating the rules.\n\n> **Moderator:** {interaction.user.mention}\n> **Reason:** {reason}\n> **Punishment:** {punishment}\n\n-# *If this was false open a ticket in <#1117544480405467157>.*")
+        embed.set_footer(text="Powered by SFRP", icon_url="https://cdn.discordapp.com/attachments/1308174353279488009/1310587102706008135/my-image_44-2.png?ex=674dabda&is=674c5a5a&hm=4729d8fe8bcb8331f010cce47b3c5ae4d61ee72fcd7abc18f619d06eeedb6540&")
+        
         channel = self.client.get_channel(int(INFRACT_CHANNEL_ID))
         await channel.send(content=user.mention, embed=infract_embed)
         await interaction.response.send_message("Successfully infracted the user.")
+        await user.send(embed=embed)
 
     @app_commands.command(name="promote", description="Promotes the given staff member.")
     @app_commands.checks.has_any_role(DIRECTIVE_ROLE, IA_ROLE, MGMT_ROLE)

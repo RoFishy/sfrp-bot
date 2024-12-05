@@ -59,7 +59,7 @@ class maincmds(commands.Cog):
     @app_commands.command(name="ping", description="Shows the bot's current latency.")
     async def ping(self, interaction : discord.Interaction):
         embed = discord.Embed(title="🏓 | Pong!", color=discord.Color.orange())
-        embed.add_field(name="Ping:", value=f"{round(self.client.latency) * 1000}ms")
+        embed.add_field(name="Ping:", value=f"{round(self.client.latency*1000)}ms")
 
         currentTime = time.time()
         diff = int(round(currentTime-startTime))

@@ -14,7 +14,7 @@ voteCount = 0
 votedUsers = []
 
 class Counter(discord.ui.View):
-    @discord.ui.button(label="Votes: 0", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(label="Votes: 0", style=discord.ButtonStyle.blurple, custom_id="vote")
     async def vote(self, interaction: discord.Interaction, button: discord.ui.Button):
         global voteCount
         global votedUsers
@@ -31,7 +31,7 @@ class Counter(discord.ui.View):
 
         await interaction.message.edit(view=self)
 
-    @discord.ui.button(label="View Voters", style=discord.ButtonStyle.red)
+    @discord.ui.button(label="View Voters", style=discord.ButtonStyle.red, custom_id="view-votes") 
     async def voters(self, interaction: discord.Interaction, button: discord.ui.Button):
         global votedUsers
         mentions = []
@@ -57,29 +57,33 @@ class sessions(commands.Cog):
         await interaction.response.defer()
         fmt = await self.client.tree.sync()
         await interaction.followup.send(f"Synced {len(fmt)} commands.")
+
+    sessions_group = app_commands.Group(
+        name="session",
+        description="Session commands."
+    )
         
-    @app_commands.command(name="poll", description="Initiates a session poll.")
+    @sessions_group.command(name="poll", description="Initiates a session poll.")
     @app_commands.checks.has_any_role(MGMT_ROLE, DIRECTIVE_ROLE)
     async def poll(self, interaction : discord.Interaction, votes : int):
         global voteCount
         global votedUsers
         votedUsers.clear()
         voteCount = 0
-        await interaction.response.defer()
         emoji = get(interaction.guild.emojis, name="sfrp")
         channel = self.client.get_channel(int(SESSION_CHANNEL_ID))
 
         embed = discord.Embed(title=f"{emoji} | Session Poll", color=discord.Color.orange(), description=f"A session vote has been initiated! If you vote during this time, you are required to join the in-game server within 15 minutes to avoid moderation!\n\nVotes needed: {votes}\n-# Vote up!")
         embed.set_image(url="https://cdn.discordapp.com/attachments/1131850933551239173/1308024411118374953/SFRP_SSV_embed.png?ex=674d93a9&is=674c4229&hm=d1cff433f6064dcb6fb775ab341df54942e5ad593613b7fec25dccb638600218&")
-        message = await channel.send(embed=embed, view=Counter())
-        #wait message.add_reaction("✅")
+        view = Counter(timeout=None)
+        await channel.send(embed=embed, view=view)
 
         await interaction.followup.send(content="Sent the session poll message.")
 
-    @app_commands.command(name="ssu", description="Initiates a server start-up.")
+    @sessions_group.command(name="startup", description="Initiates a server start-up.")
     @app_commands.checks.has_any_role(MGMT_ROLE, DIRECTIVE_ROLE)
     async def ssu(self, interaction: discord.Interaction):
-        print("Activated")
+        await interaction.response.defer()
         emoji = get(interaction.guild.emojis, name="sfrp")
         channel = self.client.get_channel(int(SESSION_CHANNEL_ID))
 
@@ -89,7 +93,7 @@ class sessions(commands.Cog):
         await channel.send(embed=embed)
         await interaction.followup.send(content="Sent the server start-up message.")
 
-    @app_commands.command(name="ssd", description="Initiates a server shutdown.")
+    @sessions_group.command(name="shutdown", description="Initiates a server shutdown.")
     @app_commands.checks.has_any_role(MGMT_ROLE, DIRECTIVE_ROLE)
     async def ssd(self, interaction: discord.Interaction):
         await interaction.response.defer()
@@ -102,19 +106,19 @@ class sessions(commands.Cog):
         await channel.send(embed=embed)
         await interaction.followup.send(content="Sent the server shutdown message.")
 
-    @app_commands.command(name="low", description="Sends the low player count message.")
+    @sessions_group.command(name="low", description="Sends the low player count message.")
     @app_commands.checks.has_any_role(MGMT_ROLE, DIRECTIVE_ROLE)
     async def low(self, interaction: discord.Interaction):
         await interaction.response.defer()
         emoji = get(interaction.guild.emojis, name="sfrp")
         channel = self.client.get_channel(int(SESSION_CHANNEL_ID))
 
-        embed = discord.Embed(title=f"{emoji} | Low Player Count", color=discord.Color.orange(), description="Our in-game server has reach a low player count! \n> Join up to help us get a session revive!\n\nCode: `SFrp`\n\nServer Owner: `anse1125` \n\nServer Name: San Francisco Roleplay | Custom Liveries | Strict\n\n")
+        embed = discord.Embed(title=f"{emoji} | Low Player Count", color=discord.Color.orange(), description="Our in-game server has reach a low player count! \nJoin up to help us get a session revive!\n\nCode: `SFrp`\n\nServer Owner: `anse1125` \n\nServer Name: San Francisco Roleplay | Custom Liveries | Strict\n\n")
 
         await channel.send(embed=embed)
         await interaction.followup.send(content="Sent the low player count message.")
 
-    @app_commands.command(name="full", description="Sends the full server message.")
+    @sessions_group.command(name="full", description="Sends the full server message.")
     @app_commands.checks.has_any_role(MGMT_ROLE, DIRECTIVE_ROLE)
     async def ssd(self, interaction: discord.Interaction):
         await interaction.response.defer()
