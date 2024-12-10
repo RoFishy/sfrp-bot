@@ -66,6 +66,7 @@ class sessions(commands.Cog):
     @sessions_group.command(name="poll", description="Initiates a session poll.")
     @app_commands.checks.has_any_role(MGMT_ROLE, DIRECTIVE_ROLE)
     async def poll(self, interaction : discord.Interaction, votes : int):
+        await interaction.response.defer()
         global voteCount
         global votedUsers
         votedUsers.clear()
